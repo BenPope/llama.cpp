@@ -285,6 +285,6 @@ target_compile_features(ggml-hrx-compile-kernel PRIVATE cxx_std_17)
 add_executable(ggml-hrx-analyze-graph
     tools/analyze-graph.cpp
 )
-target_link_libraries(ggml-hrx-analyze-graph PRIVATE ggml-hrx ggml ggml-hrx-kernel-corpus)
+target_link_libraries(ggml-hrx-analyze-graph PRIVATE hrx::hrx ggml ggml-hrx-kernel-corpus)
 target_include_directories(ggml-hrx-analyze-graph PRIVATE . ../../../vendor)
 target_compile_features(ggml-hrx-analyze-graph PRIVATE cxx_std_17)
