@@ -30,6 +30,7 @@ if(HRX_SOURCE_DIR)
         -DIREE_HAL_DRIVER_LOCAL_TASK=ON
         -DIREE_HAL_DRIVER_NULL=ON
         -DLIBHRX_BUILD_CTS=OFF
+        -DIREE_ENABLE_WERROR_FLAG=OFF
     )
     if(IREE_ROCM_PATH)
         list(APPEND GGML_HRX_CMAKE_ARGS -DIREE_ROCM_PATH=${IREE_ROCM_PATH})
@@ -293,9 +294,14 @@ target_link_libraries(ggml-hrx-compile-kernel PRIVATE hrx::hrx loomc::loomc)
 target_include_directories(ggml-hrx-compile-kernel PRIVATE .)
 target_compile_features(ggml-hrx-compile-kernel PRIVATE cxx_std_17)
 
-add_executable(ggml-hrx-analyze-graph
-    tools/analyze-graph.cpp
-)
-target_link_libraries(ggml-hrx-analyze-graph PRIVATE ggml-hrx ggml ggml-hrx-kernel-corpus)
-target_include_directories(ggml-hrx-analyze-graph PRIVATE . ../../../vendor)
-target_compile_features(ggml-hrx-analyze-graph PRIVATE cxx_std_17)
+if (NOT GGML_BACKEND_DL)
+    # Dev tools link a ggml backend directly; they can't build with
+    # GGML_BACKEND_DL, where the backend is a runtime-loaded MODULE that CMake
+    # won't link into an executable. These tools are for graph inspection only.
+    add_executable(ggml-hrx-analyze-graph
+	    tools/analyze-graph.cpp
+    )
+    target_link_libraries(ggml-hrx-analyze-graph PRIVATE ggml-hrx ggml ggml-hrx-kernel-corpus)
+    target_include_directories(ggml-hrx-analyze-graph PRIVATE . ../../../vendor)
+    target_compile_features(ggml-hrx-analyze-graph PRIVATE cxx_std_17)
+endif()
