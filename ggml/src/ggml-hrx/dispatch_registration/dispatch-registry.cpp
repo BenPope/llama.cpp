@@ -145,6 +145,8 @@ const DispatchRegistry * find_dispatch_registry(const DispatchTarget & target) {
     static const DispatchRegistry gfx1100_generic_only_registry = build_registry(false);
     static const DispatchRegistry gfx1151_registry              = build_registry(true);
     static const DispatchRegistry gfx1151_generic_only_registry = build_registry(false);
+    static const DispatchRegistry gfx1201_registry              = build_registry(true);
+    static const DispatchRegistry gfx1201_generic_only_registry = build_registry(false);
 
     const bool qwen_disabled = qwen_dispatch_disabled_from_environment();
 
@@ -153,6 +155,9 @@ const DispatchRegistry * find_dispatch_registry(const DispatchTarget & target) {
     }
     if (target.architecture == "gfx1151") {
         return qwen_disabled ? &gfx1151_generic_only_registry : &gfx1151_registry;
+    }
+    if (target.architecture == "gfx1201") {
+        return qwen_disabled ? &gfx1201_generic_only_registry : &gfx1201_registry;
     }
     return nullptr;
 }
