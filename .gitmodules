@@ -1,0 +1,3 @@
+[submodule "hrx-system"]
+	path = hrx-system
+	url = git@github.com:ROCm/hrx-system.git
